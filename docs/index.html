@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Tip Explorer Pitch</title>
+<style>
+body { margin:0; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.slide { width:100vw; height:100vh; box-sizing:border-box; padding:70px 90px; display:none; background:#fdfdfd; }
+.slide.active { display:block; }
+h1 { color:#2c3e50; font-size:2.6em; border-bottom:4px solid #3498db; padding-bottom:14px; }
+h2 { color:#2980b9; }
+pre { background:#2c3e50; color:#ecf0f1; padding:16px; border-radius:6px; overflow:auto; }
+.small { color:#7f8c8d; }
+.nav { position:fixed; bottom:18px; right:26px; }
+.nav button { font-size:1.1em; padding:8px 16px; margin-left:6px; border:1px solid #3498db; background:white; color:#3498db; border-radius:5px; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="slide active">
+  <h1>Tip Explorer</h1>
+  <p style="font-size:1.4em">An interactive Shiny application for exploring restaurant tipping behavior.</p>
+  <p class="small">Developing Data Products — Course Project</p>
+</div>
+<div class="slide">
+  <h2>The data</h2>
+  <p>The <code>tips</code> dataset (244 restaurant bills) records the total bill, tip, day, and smoker status.</p>
+  <pre>`r mean(tips$tip)`</pre>
+  <p class="small">Embedded R code runs when the deck is built — mean tip is about $3.00.</p>
+</div>
+<div class="slide">
+  <h2>The application</h2>
+  <p>Three widgets drive the analysis:</p>
+  <ul>
+    <li><b>Day of week</b> — select box filters to one day</li>
+    <li><b>Minimum total bill</b> — slider prunes small tickets</li>
+    <li><b>Smokers only</b> — checkbox subset</li>
+  </ul>
+</div>
+<div class="slide">
+  <h2>The server logic</h2>
+  <pre>filtered <- reactive({
+  df <- tips
+  if (input$day != "All") df <- df[df$day == input$day, ]
+  df <- df[df$total_bill >= input$total_bill, ]
+  if (input$smoker_only) df <- df[df$smoker == "Yes", ]
+  df
+})</pre>
+  <p>The histogram and summary table re-render on every widget change.</p>
+</div>
+<div class="slide">
+  <h2>Try it</h2>
+  <p>App: <b>theylor-datascience.shinyapps.io/tip-explorer</b></p>
+  <p>Code: <b>github.com/theylor999/tip-explorer</b></p>
+  <p class="small">Thank you!</p>
+</div>
+<div class="nav"><button onclick="nav(-1)">&larr;</button><button onclick="nav(1)">&rarr;</button></div>
+<script>
+let cur=0; const slides=document.querySelectorAll('.slide');
+function nav(d){ slides[cur].classList.remove('active'); cur=Math.min(Math.max(cur+d,0),slides.length-1); slides[cur].classList.add('active'); }
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') nav(1); if(e.key==='ArrowLeft') nav(-1); });
+</script>
+</body>
+</html>

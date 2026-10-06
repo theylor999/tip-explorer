@@ -1,0 +1,6 @@
+shiny>=1.0
+plotly>=5.18
+seaborn>=0.13
+pandas>=2.0
+matplotlib>=3.8
+numpy>=1.26
